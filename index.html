@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#13261d">
+<title>Larry's Great Golf Cart Race — Greed or Goodness</title>
+<meta name="description" content="Race Larry's orange Kubota through a chaotic nursery while choosing between greed and goodness in a Bible-based arcade adventure.">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Larry's Great Golf Cart Race">
+<meta property="og:description" content="Race the orange Kubota, dodge nursery obstacles, and discover what Scripture teaches about treating workers fairly.">
+<meta property="og:url" content="https://crownofthornsworship.github.io/larrys-great-golf-cart-race/">
+<meta property="og:image" content="https://crownofthornsworship.github.io/larrys-great-golf-cart-race/kubota.jpg">
+<meta property="og:image:width" content="1536">
+<meta property="og:image:height" content="1152">
+<meta property="og:image:alt" content="Larry's orange Kubota utility vehicle">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Larry's Great Golf Cart Race">
+<meta name="twitter:description" content="Greed or goodness? Race the Kubota and make five big choices.">
+<meta name="twitter:image" content="https://crownofthornsworship.github.io/larrys-great-golf-cart-race/kubota.jpg">
+<style>body{margin:0;background:#13261d;color:#fff;font:16px system-ui;text-align:center}main{max-width:520px;margin:auto;padding:10px}h1{font-size:clamp(22px,5vw,30px);margin:6px}p{margin:8px}canvas{width:min(100%,420px);height:auto;border:3px solid #e7b64b;border-radius:12px;touch-action:none;background:#6d6656}button{cursor:pointer;border:0;border-radius:10px;padding:12px;font-weight:800;font-size:16px;background:#ffd05c;color:#152218}button:focus-visible{outline:3px solid white}#controls{display:flex;justify-content:center;gap:8px;margin:8px 0}#stats{font-weight:700;margin:8px}#info{min-height:45px}#modal{position:fixed;inset:0;background:#07130cde;display:none;align-items:center;justify-content:center;padding:16px;z-index:3}#modal.show{display:flex}#panel{background:#f8f1da;color:#18251b;max-width:420px;border-radius:18px;padding:22px;box-shadow:0 12px 50px #0009;text-align:left}#panel h2{margin:0 0 8px}#panel button{display:block;width:100%;margin:10px 0;text-align:left}#panel button.good{background:#a5e7a9}#panel button.bad{background:#f3b8a5}#verse{font-size:13px;color:#415643;margin-top:12px}#lesson{font-weight:600}small{color:#d6e2d5}.home{position:fixed;top:max(10px,env(safe-area-inset-top));left:max(10px,env(safe-area-inset-left));z-index:4;background:#071b13e8;color:#fff;text-decoration:none;padding:9px 12px;border:1px solid #ffffff55;border-radius:999px;font-size:12px;font-weight:800}.kubota-photo{display:block;width:min(100%,420px);aspect-ratio:16/7;object-fit:cover;object-position:center 67%;border:2px solid #e7b64b;border-radius:12px;margin:8px auto 10px;box-shadow:0 8px 24px #0006}.c4{display:block;color:#f4d77e;margin:18px 0 4px;font-size:13px}@media(max-width:520px){main{padding-top:48px}#controls{position:sticky;bottom:max(5px,env(safe-area-inset-bottom));z-index:2;background:#13261de8;padding:6px 0;backdrop-filter:blur(8px)}#controls button{font-size:14px;padding:12px 9px}}</style>
+</head>
+<body>
+<a class="home" href="https://crownofthornsworship.github.io/light-and-life-games/">⌂ Light &amp; Life Games</a>
+<main>
+<h1>🏁 Larry's Great Golf Cart Race</h1>
+<p>💰 GREED vs ❤️ GOODNESS</p>
+<img class="kubota-photo" src="./kubota.jpg" alt="The real orange Kubota that inspired Larry's Great Golf Cart Race" width="1536" height="1152">
+<div id="stats" aria-live="polite">💰 $0 · ❤️ Trust 50 · 🏁 0m</div>
+<canvas id="game" width="420" height="600" aria-label="Three-lane golf cart racing game">
+</canvas>
+<div id="info" aria-live="polite">Steer around rocks. Collect hearts and cash. Face a moral choice at every checkpoint!</div>
+<div id="controls">
+<button id="left">◀ LEFT</button>
+<button id="start">START / RESTART</button>
+<button id="right">RIGHT ▶</button>
+</div>
+<small>Keyboard: ← → or A D · Mobile: swipe or buttons</small>
+<p>
+<small>Inspired by Ephesians 6:9 and Colossians 4:1. Scripture lessons are paraphrased, not direct quotations.</small>
+</p>
+<a class="c4" href="https://venmo.com/u/MTA-7777" target="_blank" rel="noopener">⚡ Buy Mike a C4 · @MTA-7777</a>
+</main>
+<div id="modal" role="dialog" aria-modal="true" aria-labelledby="question">
+<div id="panel">
+<h2 id="question">
+</h2>
+<p id="scenario">
+</p>
+<div id="answers">
+</div>
+<p id="lesson">
+</p>
+<p id="verse">
+</p>
+</div>
+</div>
+<script>
+const c=document.querySelector('#game'),ctx=c.getContext('2d'),stats=document.querySelector('#stats'),info=document.querySelector('#info'),modal=document.querySelector('#modal'),answers=document.querySelector('#answers');const lanes=[110,210,310];let state='ready',lane=1,items=[],distance=0,trust=50,money=0,health=3,frames=0,checkpoint=0,rafLast=0;const questions=[{title:'💸 Payday Panic',story:'Payday is here. Larry can pay everyone now or keep the money earning interest.',bad:'Delay payroll. That interest is mine!',good:'Pay the workers on time.',verse:'Colossians 4:1 — Treat those who work for you fairly and rightly.',lesson:'Fair pay matters more than a few extra dollars.'},{title:'🔧 The Broken Cart',story:'The Kubota needs repairs, and the crew needs safe equipment.',bad:'Ignore the problem. Keep the cash!',good:'Repair the equipment before someone gets hurt.',verse:'Ephesians 6:9 — Those with authority must treat people well.',lesson:'Caring for people is more important than saving a buck.'},{title:'📣 The Threatening Boss',story:'An employee asks for time to care for family. How will Larry respond?',bad:'Threaten to fire them!',good:'Listen respectfully and work toward a fair solution.',verse:'Ephesians 6:9 — Stop using threats; everyone answers to the same Lord.',lesson:'Respect builds trust; intimidation destroys it.'},{title:'🌱 The Great Nursery Rush',story:'Orders are piling up. One worker is overwhelmed.',bad:'Yell and demand more speed!',good:'Help the team and organize the work.',verse:'Romans 12:10 — Show honor and care for one another.',lesson:'Leadership means serving, not just demanding.'},{title:'⚖️ The Final Payday Showdown',story:'Larry reaches the finish line. The employees are watching. What kind of boss will he be?',bad:'Choose profit over people again!',good:'Choose justice, fairness, and goodness.',verse:'Colossians 4:1; Ephesians 6:9 — Earthly authority does not remove accountability to God.',lesson:'You can win the race and still lose what matters most.'}];function clamp(n){return Math.max(0,Math.min(100,n))}function update(){stats.textContent=`💰 $${money} · ❤️ Trust ${trust} · 🏁 ${Math.floor(distance/10)}m · 🛞 ${health} lives`}function steer(d){if(state==='running')lane=Math.max(0,Math.min(2,lane+d))}function spawn(){let r=Math.random();items.push({lane:Math.floor(Math.random()*3),y:-35,type:r<.34?'rock':r<.67?'cash':'heart'})}function decision(){state='choice';const q=questions[checkpoint];document.querySelector('#question').textContent=q.title;document.querySelector('#scenario').textContent=q.story;document.querySelector('#lesson').textContent='';document.querySelector('#verse').textContent=q.verse;answers.innerHTML='';[['💰 GREED — '+q.bad,false],['❤️ GOODNESS — '+q.good,true]].forEach(([label,good])=>{let b=document.createElement('button');b.className=good?'good':'bad';b.textContent=label;b.onclick=()=>{money+=good?0:250;trust=clamp(trust+(good?16:-22));document.querySelector('#lesson').textContent=q.lesson;answers.innerHTML='';const next=document.createElement('button');next.textContent=checkpoint===4?'SEE THE RESULTS 🏁':'KEEP RACING ▶';next.onclick=()=>{modal.classList.remove('show');checkpoint++;if(checkpoint===5){state='won';info.textContent=trust>=65?'🏆 GOODNESS CHAMPION! Larry learned to treat people right.':'💰 Larry crossed the finish line, but goodness is the real championship. Try again!'}else state='running';update()};answers.append(next);update()};answers.append(b)});modal.classList.add('show')}
+function draw(){ctx.clearRect(0,0,420,600);ctx.fillStyle='#407b39';ctx.fillRect(0,0,420,600);ctx.fillStyle='#746b5b';ctx.fillRect(55,0,310,600);ctx.strokeStyle='#f4e7b1';ctx.lineWidth=4;ctx.setLineDash([24,25]);for(let n of [160,260]){ctx.beginPath();ctx.moveTo(n,0);ctx.lineTo(n,600);ctx.stroke()}ctx.setLineDash([]);ctx.font='36px system-ui';items.forEach(i=>ctx.fillText(i.type==='rock'?'🪨':i.type==='cash'?'💰':'❤️',lanes[i.lane]-21,i.y));let px=lanes[lane];ctx.fillStyle='#111';for(let dx of [-39,30])for(let dy of [486,542])ctx.fillRect(px+dx,dy,11,26);ctx.fillStyle='#f46621';ctx.fillRect(px-32,470,64,104);ctx.fillStyle='#252e34';ctx.fillRect(px-26,491,52,36);ctx.fillStyle='#ffdba5';ctx.beginPath();ctx.arc(px,490,12,0,Math.PI*2);ctx.fill();ctx.fillStyle='#141414';ctx.font='bold 13px system-ui';ctx.textAlign='center';ctx.fillText('KUBOTA',px,564);ctx.textAlign='left';ctx.font='21px system-ui';ctx.fillText('🪴',6,90);ctx.fillText('🌲',375,165);ctx.fillText('🌱',8,340);if(state==='ready'||state==='over'||state==='won'){ctx.fillStyle='#07140bdc';ctx.fillRect(20,193,380,204);ctx.fillStyle='#fff';ctx.textAlign='center';ctx.font='bold 25px system-ui';ctx.fillText(state==='won'?'FINISH LINE!':state==='over'?'CART BROKE DOWN!':'GREED OR GOODNESS?',210,243);ctx.font='17px system-ui';let lines=state==='won'?[trust>=65?'🏆 GOODNESS CHAMPION!':'Money cannot buy employee trust.',`Trust ${trust} · Cash $${money}`]:state==='over'?['Watch out for obstacles!','Try again and choose goodness.']:['Five checkpoints. Five big choices.','Hearts build trust. Cash costs trust.'];lines.forEach((t,i)=>ctx.fillText(t,210,283+i*32));ctx.fillText('Press START to race!',210,360);ctx.textAlign='left'}}function tick(t){if(state==='running'){frames++;distance+=2.3;if(frames%35===0)spawn();for(const i of items){i.y+=5+checkpoint*.65;if(i.y>473&&i.y<566&&i.lane===lane){if(i.type==='rock'){health--;info.textContent='🪨 Ouch! Broken equipment!'}else if(i.type==='cash'){money+=100;trust=clamp(trust-6);info.textContent='💰 +$100, but trust -6.'}else{trust=clamp(trust+8);info.textContent='❤️ Goodness! Employee trust +8.'}i.y=999}}items=items.filter(i=>i.y<625);if(health<=0){state='over';info.textContent='Larry crashed! Restart and try again.'}else if(distance>=(checkpoint+1)*460){items=[];decision()}update()}draw();requestAnimationFrame(tick)}document.querySelector('#start').onclick=()=>{modal.classList.remove('show');state='running';lane=1;items=[];distance=0;trust=50;money=0;health=3;frames=0;checkpoint=0;info.textContent='Race on! Five decisions stand between Larry and the finish line.';update()};document.querySelector('#left').onclick=()=>steer(-1);document.querySelector('#right').onclick=()=>steer(1);window.addEventListener('keydown',e=>{if(['ArrowLeft','ArrowRight'].includes(e.key))e.preventDefault();if(['ArrowLeft','a','A'].includes(e.key))steer(-1);if(['ArrowRight','d','D'].includes(e.key))steer(1)});let sx=0;c.addEventListener('touchstart',e=>sx=e.touches[0].clientX,{passive:true});c.addEventListener('touchend',e=>{let d=e.changedTouches[0].clientX-sx;if(Math.abs(d)>25)steer(d>0?1:-1)},{passive:true});update();requestAnimationFrame(tick);
+</script>
+</body>
+</html>
